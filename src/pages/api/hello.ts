@@ -5,9 +5,12 @@ type Data = {
   name: string
 }
 
+//viacep.com.br/ws/01001000/json/
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   res.status(200).json({ name: 'John Doe' })
 }
+
