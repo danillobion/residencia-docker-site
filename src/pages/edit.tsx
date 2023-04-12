@@ -1,5 +1,36 @@
-  
+import { ToastContainer, toast, TypeOptions } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Edit() {
+
+  async function salvarProduto() {
+    const nome = document.querySelector('#nome').value;
+    const categoria = document.querySelector('#categoria').value;
+    const preco = document.querySelector('#preco').value;
+
+    let url = "http://172.17.0.2:3030/produto/create/";
+    const response = await fetch(url,{
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            "Content-type": 'application/json' 
+        },
+        body: JSON.stringify({ nome: nome, categoria:categoria, preco:parseInt(preco) })
+    }).then(e=>{
+        if(e.status == 200){
+            toast("Produto "+nome+" cadastrado com sucesso!", {
+              type: "success" as TypeOptions
+            });
+            document.querySelector('#nome').value = "";
+            document.querySelector('#categoria').value = "";
+            document.querySelector('#preco').value = "";
+        }else{
+          toast("Erro ao tentar cadastrar o produto "+nome+". Por favor, tente novamente mais tarde!", {
+            type: "error" as TypeOptions
+          });
+        }
+    });
+  }
     return(
       <div className='bg-white text-black min-h-screen pt-10'>
         <div className="container mx-auto grid grid-cols-6 gap-4">
@@ -34,7 +65,7 @@ export default function Edit() {
                             <p className="text-red-500 text-xs italic"></p>
                         </div>
                         <div className="flex items-center justify-end">
-                        <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        <button type="button" onClick={salvarProduto} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Cadastrar
                         </button>
                         </div>
@@ -45,6 +76,7 @@ export default function Edit() {
         </div>
         </div>
         </div>
+        <ToastContainer position="bottom-left" newestOnTop />
       </div>
     );
   }
